@@ -1,2 +1,4 @@
+flask
+whoosh
 requests
 BeautifulSoup4
