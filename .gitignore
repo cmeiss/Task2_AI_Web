@@ -1,0 +1,32 @@
+deprecated/
+
+# --- Python ---
+__pycache__/
+*.py[codz]
+*$py.class
+*.so
+
+# --- Virtual environments ---
+stw/
+.env
+.envrc
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- IDEs ---
+.vscode/
+.spyderproject
+.spyproject
+.ropeproject
+.ruff_cache/
+
+# --- Jupyter ---
+.ipynb_checkpoints
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
