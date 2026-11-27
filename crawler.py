@@ -3,19 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urldefrag, urljoin
 
-from index import build_index, update_index
-# NOTE: macht es Sinn, den Crawler als Objekt zu bauen?
-
-
-def print_results(visited, index):
-    print("Crawling finished. Visited", len(visited), "pages.")
-    print("Index contains", len(index), "keywords.")
-    print("Sample index entries:")
-    for keyword in list(index.keys())[:3]:  # print the first keyword and its associated URLs
-        print(f"{keyword}: {index[keyword]}")
+from index import update_index
 
 def crawl(root: str, server: str = None, index_dir: str = "indexdir"):
-    # TODO: broke sth here, crawling takes longer and re-visits
     agenda = [root] # pages that need to be crawled
     visited = set() # pages that have already been crawled
     if not server:
@@ -44,12 +34,9 @@ def crawl(root: str, server: str = None, index_dir: str = "indexdir"):
             # Get the absolute URL of the link, and remove any fragment (the part after #)
             target, _ = urldefrag(urljoin(r.url, link["href"]))
             if (target.startswith(f"https://{server}/")):       #check that link is on the same server
-                print("Found ", target)
-                if target not in visited:  # only add the link to the agenda if it hasn't been visited yet
+                if target not in visited and target not in agenda:  # only add the link to the agenda if it hasn't been visited yet
+                    print("Adding ", target)
                     agenda.append(target)           # add the link to the agenda to make sure it gets crawled later
-
-        # NOTE: in original, we called build_index with url and not with target -- why?
-        # okay, thought about it again, target should be appended to agenda, so it should be crawled later 
-        # -- something not right, does not seem to work
-        update_index(soup, target, index_dir)
-        #print_results(visited, index)
+        
+        print("Crawling finished. Visited", len(visited), "pages.")
+        update_index(soup, url, index_dir)
